@@ -1,0 +1,40 @@
+1.must put (char**) and (char*) converter to calloc function.
+incorrect:
+char **puzzle = calloc(numRow, sizeof(char*));
+puzzle[i] = calloc(numCol, sizeof(char));
+output:
+Welcome to Puzzle!
+numRow = 20
+numCol = 20
+P'@?
+?'@?
+P(@?
+?(@?
+P)@?
+GMMTDDNUSGXZCOEsVKOj
+KJTENWJEURUPMQCvTKDa
+RMPEWMVZMFTTPSUaSQGR
+JGARUNYAHMPZAODREFZS
+OZDBIEHARPJOQUOvGJJb
+WTRYDSUTROGQMXRrIXGU
+NTLHKLTEJHTQWLPyYIET
+BQHHZMSHGNYCXLaoCDKZ
+BSOIUIIQRODYENXQZAUD
+QBVODTTETVZFMRDQvJXO
+QJVEEVCYAWCMYWIJgZRG
+EENTJWYZFXHVNYUDrBGG
+NTZLHWUOHVFKQPXVeXNR
+WDAVVJIHLRCXWYXYsQIH
+AZUOKJGSQXHUDMMWfSYl
+correct:
+char **puzzle = (char**)calloc(numRow, sizeof(char*));
+puzzle[i] = (char*)calloc(numCol, sizeof(char));
+
+2. collect the '\0' after each line.
+for (j = 0; j < numCol; j++)
+{
+   fscanf(fp, "%c", &puzzle[i][j]);
+}
+getc(fp);
+
+
