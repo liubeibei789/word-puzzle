@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include <string.h>
+#include<string.h>
 
 #define MAX_DIGIT_N 3 //max puzzle size 999*999
 #define MAX_WORD_LEN 30 //max file name length
