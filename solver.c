@@ -1,6 +1,7 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 #define MAX_DIGIT_N 3 //max puzzle size 999*999
 #define MAX_WORD_LEN 30 //max file name length
@@ -51,6 +52,9 @@ char** readPuzzle(char* fileDir)
    {
       puzzle[i] = (char*)calloc(numCol+1, sizeof(char));
       fscanf(fp, "%s", puzzle[i]);
+      for(int j = 0; puzzle[i][j]; j++){
+         puzzle[i][j] = tolower(puzzle[i][j]);
+      }
    }
 
    // close file pointer and clean up
@@ -96,6 +100,14 @@ char** readUserInput(char* fileDir)
       //word = NULL;
       word = calloc(MAX_WORD_LEN, sizeof(char));
       fscanf(fp, "%s", word);
+      for(int i = 0; word[i]; i++){
+         word[i] = tolower(word[i]);
+      }
+      /* // this piece of code is not working.confused?
+      for ( ; *word; ++word)
+      {
+         *word = tolower(*word);
+      }*/
 
       wordList[cnt++] = word;
 
@@ -108,7 +120,6 @@ char** readUserInput(char* fileDir)
 
    return wordList;  
 }
-
 
 //==========================================================
 // function: disPlay
