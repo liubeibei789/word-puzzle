@@ -2,30 +2,7 @@
 incorrect:
 char **puzzle = calloc(numRow, sizeof(char*));
 puzzle[i] = calloc(numCol, sizeof(char));
-output:
-Welcome to Puzzle!
-numRow = 20
-numCol = 20
-P'@?
-?'@?
-P(@?
-?(@?
-P)@?
-GMMTDDNUSGXZCOEsVKOj
-KJTENWJEURUPMQCvTKDa
-RMPEWMVZMFTTPSUaSQGR
-JGARUNYAHMPZAODREFZS
-OZDBIEHARPJOQUOvGJJb
-WTRYDSUTROGQMXRrIXGU
-NTLHKLTEJHTQWLPyYIET
-BQHHZMSHGNYCXLaoCDKZ
-BSOIUIIQRODYENXQZAUD
-QBVODTTETVZFMRDQvJXO
-QJVEEVCYAWCMYWIJgZRG
-EENTJWYZFXHVNYUDrBGG
-NTZLHWUOHVFKQPXVeXNR
-WDAVVJIHLRCXWYXYsQIH
-AZUOKJGSQXHUDMMWfSYl
+
 correct:
 char **puzzle = (char**)calloc(numRow, sizeof(char*));
 puzzle[i] = (char*)calloc(numCol, sizeof(char));
@@ -37,4 +14,18 @@ for (j = 0; j < numCol; j++)
 }
 getc(fp);
 
+3. initialize double pointer.
+incorrect:
+char** puzzle = {"fhsorapplewoappnapples","aaappleospwappleswapp","woapplawwwsagmml"};
+char puzzle[][] = {"fhsorapplewoappnapples","aaappleospwappleswapp","woapplawwwsagmml"};
+char puzzle[3][] = {"fhsorapplewoappnapples","aaappleospwappleswapp","woapplawwwsagmml"};
 
+correct:
+char puzzle[][30] = {"fhsorapplewoappnapples","aaappleospwappleswapp","woapplawwwsagmml"};
+char puzzle[3][30] = {"fhsorapplewoappnapples","aaappleospwappleswapp","woapplawwwsagmml"};
+
+this works best:
+char** puzzle = (char**)calloc(3, sizeof(char*));
+   puzzle[0] = "fhsorapplewoappnapples";
+   puzzle[1] = "aaappleospwappleswapp";
+   puzzle[2] = "woapplawwwsagmml";
