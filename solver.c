@@ -3,15 +3,14 @@
 #include <string.h>
 #include <ctype.h>
 
+
+#include "solver.h"
+
 #define MAX_DIGIT_N 3 //max puzzle size 999*999
 #define MAX_WORD_LEN 30 //max file name length
 #define PUZZLE_FILE "./puzzle3.txt" //puzzle file directory
 #define USER_INPUT_FILE "./human_input3.txt" //user input directory
 
-typedef enum{
-   typePuzzle,
-   typeInput
-} displayType;
 
 //==========================================================
 // function: readPuzzle
@@ -122,11 +121,11 @@ char** readUserInput(char* fileDir)
 }
 
 //==========================================================
-// function: disPlay
+// function: display
 // input: 2-D matrix to be printed, enum display type
 // output: if succeed, return 0;
 //==========================================================
-int disPlay(char** matrix, displayType type)
+int display(char** matrix, displayType type, int** posList)
 {
    switch (type)
    {
@@ -136,6 +135,9 @@ int disPlay(char** matrix, displayType type)
       case typeInput:
          printf("******** User Input ********\n");
          break;
+      case typeSolution:
+         printf("******** Solution ********\n");
+         break;
       default:
          printf("display type error\n");
    }
@@ -144,6 +146,13 @@ int disPlay(char** matrix, displayType type)
    
    while (matrix[i] != NULL)
    {
+      if (type == typeSolution && posList[i])
+      {
+         for (int j = 0; posList[i][j]; j++)
+         {
+            matrix[i][j] = toupper(matrix[i][j]);
+         }
+      }
       printf("%s\n", matrix[i]);
       i++;
    }
@@ -154,9 +163,11 @@ int disPlay(char** matrix, displayType type)
 int main()
 {
    char **puzzle = readPuzzle(PUZZLE_FILE);
-   disPlay(puzzle, typePuzzle);
+   display(puzzle, typePuzzle, NULL);
    char **input = readUserInput(USER_INPUT_FILE);
-   disPlay(input, typeInput);
+   display(input, typeInput, NULL);
+
+
    return 0;
 }
    

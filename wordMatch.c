@@ -2,6 +2,11 @@
 #include<stdlib.h>
 #include<string.h>
 
+
+#include "solver.h"
+
+extern int display(char** matrix, displayType type, int** posList);
+
 //==========================================================
 // function: findMatchOneLine
 // input: 
@@ -79,6 +84,9 @@ int main()
       printf("\n");
    }
    
+   display(puzzle, typeSolution, posList);
+
+
    return 0;
 }
 

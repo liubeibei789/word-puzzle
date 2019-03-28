@@ -29,3 +29,11 @@ char** puzzle = (char**)calloc(3, sizeof(char*));
    puzzle[0] = "fhsorapplewoappnapples";
    puzzle[1] = "aaappleospwappleswapp";
    puzzle[2] = "woapplawwwsagmml";
+
+4. compiling multiple c files:
+given 3 .c files a.c、b.c、c.c：
+gcc  a.c  –o  a.o                    
+gcc  b.c  -o  b.o
+gcc  c.c  -o  c.o
+gcc  a.o  b.o  c.o  –o  all  
+./all                   
