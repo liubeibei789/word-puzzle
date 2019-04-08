@@ -121,13 +121,58 @@ char** readUserInput(char* fileDir)
 }
 
 //==========================================================
-// function: findMatch
+// function: beforeFinder
+// convert matrix to be ready to be fed into left2right finder
+// output: if succeed, return 0
+//==========================================================
+char** beforeFinder(char** puzzle, dirOpt dir)
+{
+   char **puzzlePtr = puzzle;
+   // initialize a tempPuzzle
+   int numRow = 0;
+   int numCol = strlen(puzzle[0])*2;  //should be root(2),1.414. round to 2.
+   while (*puzzlePtr)
+   {
+      numRow = numRow + 2;  //should be root(2),1.414. round to 2.
+      puzzlePtr = puzzlePtr + 1;
+   }
+
+   char **tempPuzzle = (char**)calloc(numRow, sizeof(char**));
+
+   // copy the conent
+   for (int i = 0; i < numRow/2; i++) //
+   {
+      tempPuzzle[i] = (char*)calloc(numCol, sizeof(char*));
+      printf("line %d, before cnvt:%s\n", i, puzzle[i]);
+      for (int j = 0; j < numCol/2; j++)
+      {
+         tempPuzzle[i][j] = puzzle[i][numCol/2-1-j];
+      }
+      printf("after cnvt:%s\n", tempPuzzle[i]);
+   }
+
+   return tempPuzzle;
+}
+
+//==========================================================
+// function: afterFinder
+// convert output from finder back to original matrix
+// output: if succeed, return 0
+//==========================================================
+int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
+{
+   
+   return 0;
+}
+
+//==========================================================
+// function: finder
 // input: 
 // matrix - puzzle matrix
 // userLine - user input words
 // output: if succeed, return 0
 //==========================================================
-int findMatch(char** matrix, char** userInput)
+int finder(char** matrix, char** userInput)
 {
    printf("88888\n");
    char **matrixLine = matrix;
@@ -139,11 +184,13 @@ int findMatch(char** matrix, char** userInput)
       while (*matrixLine != NULL)    //iter through puzzle rows
       {
          char *p = strstr(*matrixLine, *userLine);   
-         while(p) {
-            for (int i = 0; i < strlen(*userLine); i++) {
+         while(p) 
+         {
+            for (int i = 0; i < strlen(*userLine); i++) 
+            {
                *(p+i) = toupper(*(p+i));
             }
-            printf("77777:one match found\n");
+            printf("77777:one match found, %s\n", *userLine);
             p = strstr(p+1, *userLine);
          }
          matrixLine = matrixLine + 1;
@@ -194,8 +241,17 @@ int main()
    //display(puzzle, typePuzzle);
    char **input = readUserInput(USER_INPUT_FILE);
    //display(input, typeInput);
-   findMatch(puzzle, input);
-   display(puzzle, typeSolution);
+
+   // ----------- left 2 right --------
+   //finder(puzzle, input);
+   //display(puzzle, typeSolution);
+   
+   // ----------- right 2 left --------
+   char **tempPuzzle = beforeFinder(puzzle, right2left);
+   finder(tempPuzzle, input);
+   //afterFinder(puzzle, tempPuzzle, right2left);
+   //display(puzzle, typeSolution);
+
 
    return 0;
 }
