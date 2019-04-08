@@ -1,4 +1,5 @@
 puzzle3.txt
+make
 director
 ENGINEER
 INVESTOR

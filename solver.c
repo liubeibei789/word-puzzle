@@ -34,12 +34,12 @@ char** readPuzzle(char* fileDir)
    // read row number
    fscanf(fp, "%s", temp); 
    numRow = atoi(temp);
-   printf("numRow = %d\n", numRow);
+   //printf("numRow = %d\n", numRow);
 
    // read column number
    fscanf(fp, "%s", temp);
    numCol = atoi(temp);
-   printf("numCol = %d\n", numCol);
+   //printf("numCol = %d\n", numCol);
 
    getc(fp); //collect the '\0' after 20 20
 
@@ -121,11 +121,46 @@ char** readUserInput(char* fileDir)
 }
 
 //==========================================================
+// function: findMatch
+// input: 
+// matrix - puzzle matrix
+// userLine - user input words
+// output: if succeed, return 0
+//==========================================================
+int findMatch(char** matrix, char** userInput)
+{
+   printf("88888\n");
+   char **matrixLine = matrix;
+   char **userLine = userInput;
+   int i = 0;
+
+   while (strcmp(*userLine, "exit")) //iter through userInput list
+   {
+      while (*matrixLine != NULL)    //iter through puzzle rows
+      {
+         char *p = strstr(*matrixLine, *userLine);   
+         while(p) {
+            for (int i = 0; i < strlen(*userLine); i++) {
+               *(p+i) = toupper(*(p+i));
+            }
+            printf("77777:one match found\n");
+            p = strstr(p+1, *userLine);
+         }
+         matrixLine = matrixLine + 1;
+      }
+      matrixLine = matrix; // restore matrixLine 
+      userLine = userLine + 1;
+   }
+   return 0;
+}
+
+
+//==========================================================
 // function: display
 // input: 2-D matrix to be printed, enum display type
 // output: if succeed, return 0;
 //==========================================================
-int display(char** matrix, displayType type, int** posList)
+int display(char** matrix, displayType type)
 {
    switch (type)
    {
@@ -146,13 +181,6 @@ int display(char** matrix, displayType type, int** posList)
    
    while (matrix[i] != NULL)
    {
-      if (type == typeSolution && posList[i])
-      {
-         for (int j = 0; posList[i][j]; j++)
-         {
-            matrix[i][j] = toupper(matrix[i][j]);
-         }
-      }
       printf("%s\n", matrix[i]);
       i++;
    }
@@ -163,10 +191,11 @@ int display(char** matrix, displayType type, int** posList)
 int main()
 {
    char **puzzle = readPuzzle(PUZZLE_FILE);
-   display(puzzle, typePuzzle, NULL);
+   //display(puzzle, typePuzzle);
    char **input = readUserInput(USER_INPUT_FILE);
-   display(input, typeInput, NULL);
-
+   //display(input, typeInput);
+   findMatch(puzzle, input);
+   display(puzzle, typeSolution);
 
    return 0;
 }

@@ -10,6 +10,4 @@ typedef enum{
 } displayType;
 
 
-int display(char** matrix, displayType type, int** posList);
-
 #endif //__SOLVER_H_
