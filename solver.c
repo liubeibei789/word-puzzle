@@ -11,9 +11,6 @@
 #define PUZZLE_FILE "./puzzle3.txt" //puzzle file directory
 #define USER_INPUT_FILE "./human_input3.txt" //user input directory
 
-#define max(a, b) (a >= b ? a : b)
-
-
 //==========================================================
 // function: readPuzzle
 // input: puzzle file directory
@@ -287,18 +284,95 @@ char** beforeFinder(char** puzzle, dirOpt dir)
             for (int j = 0; j < (cnt+1)/2; j++)
             {
                char tmp = tempPuzzle[i][j];
-               tempPuzzle[i][j] = tempPuzzle[i][cnt-1-j];
-               tempPuzzle[i][cnt-1-j] = tmp;
+               tempPuzzle[i][j] = tempPuzzle[i][cnt-j];
+               tempPuzzle[i][cnt-j] = tmp;
             }
             if (i < numRow-1) { cnt++;}
             else { cnt--; }
-            //printf("after cnvt:%s\n", tempPuzzle[i]);
+            printf("i=%d:after cnvt:%s\n", i, tempPuzzle[i]);
          }
+
 
          break;
       case topright2bottomleft:
+         // create triangle
+         tempPuzzle = (char**)calloc(numRow*2, sizeof(char*)); 
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+
+         // cnt increases
+         for (; i < numRow-1; i++,cnt++)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
+               tempPuzzle[i][j] = puzzle[j][i-j];
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+
+         // cnt decreases
+         for (; i < numRow*2-1; i++,cnt--)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("-------i=%d, cnt=%d---------\n",i,cnt);  //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,i-numRow+1+j,numRow-1-j);
+               tempPuzzle[i][j] = puzzle[i-numRow+1+j][numRow-1-j];
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+
          break;
-      case bottomleft2topright:
+      case bottomleft2topright:   // create triangle and flip horizontally in place
+         // create triangle
+         tempPuzzle = (char**)calloc(numRow*2, sizeof(char*)); 
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+
+         // cnt increases
+         for (; i < numRow-1; i++,cnt++)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
+               tempPuzzle[i][j] = puzzle[j][i-j];
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+
+         // cnt decreases
+         for (; i < numRow*2-1; i++,cnt--)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("-------i=%d, cnt=%d---------\n",i,cnt);  //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,i-numRow+1+j,numRow-1-j);
+               tempPuzzle[i][j] = puzzle[i-numRow+1+j][numRow-1-j];
+            }
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+         
+         // flip triangle horizontally in place
+         for (i = 0; i < numRow*2-1; i++)
+         {
+            for (int j = 0; j < (cnt+1)/2; j++)
+            {
+               char tmp = tempPuzzle[i][j];
+               tempPuzzle[i][j] = tempPuzzle[i][cnt-j];
+               tempPuzzle[i][cnt-j] = tmp;
+            }
+            if (i < numRow-1) { cnt++;}
+            else { cnt--; }
+            printf("i=%d:after cnvt:%s\n", i, tempPuzzle[i]);
+         }
+
          break;
       default:
          break;
@@ -400,10 +474,12 @@ int main()
    
    
    char **tempPuzzle;
-   // ----------- right 2 left --------
-   tempPuzzle = beforeFinder(puzzle, bottomright2topleft);
-   finder(tempPuzzle, input);
-   //afterFinder(puzzle, tempPuzzle, right2left);
+   // ----------- bottomright 2 topleft --------
+   tempPuzzle = beforeFinder(puzzle, topright2bottomleft);
+   //finder(tempPuzzle, input);
+   //afterFinder(puzzle, tempPuzzle, bottomright2topleft);
+
+
    //display(puzzle, typeSolution);
 
 
