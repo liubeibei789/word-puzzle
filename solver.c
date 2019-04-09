@@ -11,6 +11,8 @@
 #define PUZZLE_FILE "./puzzle3.txt" //puzzle file directory
 #define USER_INPUT_FILE "./human_input3.txt" //user input directory
 
+#define max(a, b) (a >= b ? a : b)
+
 
 //==========================================================
 // function: readPuzzle
@@ -138,6 +140,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
    }
 
    char **tempPuzzle;
+   int cnt, i;
 
    // copy the conent
    switch(dir)
@@ -179,7 +182,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
                tempPuzzle[i][j] = puzzle[j][i];
             }
          }
-         // flip horizontally
+         // flip horizontally in place
          for (int i = 0; i < numRow; i++)
          {
             for (int j = 0; j < (numCol+1)/2; j++)
@@ -191,9 +194,107 @@ char** beforeFinder(char** puzzle, dirOpt dir)
             printf("after cnvt:%s\n", tempPuzzle[i]);
          }
          break;
+
+      //following cases:only considering suqare puzzle at the moment.
       case topleft2bottomright:
+         // create triangle
+         tempPuzzle = (char**)calloc(numRow*2, sizeof(char*)); 
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+
+         // cnt increases
+         for (; i < numRow-1; i++,cnt++)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-i+j,j); //print of traversal
+               tempPuzzle[i][j] = puzzle[numRow-1-i+j][j];
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+
+         // cnt decreases
+         for (; i < numRow*2-1; i++,cnt--)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("-------i=%d, cnt=%d---------\n",i,cnt);  //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-(2*(numRow-1)-i)+j,j);//print of traversal
+               tempPuzzle[i][j] = puzzle[numRow-1-(2*(numRow-1)-i)+j][j];
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+         /* draft: 
+            i=0, numRow=3, j=0
+            tempPuzzle[0][0] = puzzle[2][0];
+
+            i=1, numRow=3, j=0,1
+
+            tempPuzzle[1][0] = puzzle[1][0];
+            tempPuzzle[1][1] = puzzle[2][1];
+            
+            i=2, numRow=3, j=0,1,2
+            tempPuzzle[2][2] = puzzle[0][0];
+            tempPuzzle[2][1] = puzzle[1][1];
+            tempPuzzle[2][0] = puzzle[2][2];
+
+            i=3, numRow=3, j=0,1
+            tempPuzzle[3][0] = puzzle[0][1];
+            tempPuzzle[3][1] = puzzle[1][2];
+
+            i=4, numRow=3, j=0
+            tempPuzzle[3][1] = puzzle[0][2];
+         */
          break;
-      case bottomright2topleft:
+      case bottomright2topleft:  // create triangle followed by flip triangle horizontally
+         // create triangle
+         tempPuzzle = (char**)calloc(numRow*2, sizeof(char*)); 
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+
+         // cnt increases
+         for (; i < numRow-1; i++,cnt++)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-i+j,j); //print of traversal
+               tempPuzzle[i][j] = puzzle[numRow-1-i+j][j];
+            }
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+
+         // cnt decreases
+         for (; i < numRow*2-1; i++,cnt--)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol, sizeof(char));
+            //printf("-------i=%d, cnt=%d---------\n",i,cnt);  //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-(2*(numRow-1)-i)+j,j);//print of traversal
+               tempPuzzle[i][j] = puzzle[numRow-1-(2*(numRow-1)-i)+j][j];
+            }
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+
+         // flip triangle horizontally in place
+         for (i = 0; i < numRow*2-1; i++)
+         {
+            for (int j = 0; j < (cnt+1)/2; j++)
+            {
+               char tmp = tempPuzzle[i][j];
+               tempPuzzle[i][j] = tempPuzzle[i][cnt-1-j];
+               tempPuzzle[i][cnt-1-j] = tmp;
+            }
+            if (i < numRow-1) { cnt++;}
+            else { cnt--; }
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+
          break;
       case topright2bottomleft:
          break;
@@ -297,8 +398,10 @@ int main()
    //finder(puzzle, input);
    //display(puzzle, typeSolution);
    
+   
+   char **tempPuzzle;
    // ----------- right 2 left --------
-   char **tempPuzzle = beforeFinder(puzzle, bottom2top);
+   tempPuzzle = beforeFinder(puzzle, bottomright2topleft);
    finder(tempPuzzle, input);
    //afterFinder(puzzle, tempPuzzle, right2left);
    //display(puzzle, typeSolution);
