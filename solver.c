@@ -129,10 +129,10 @@ char** beforeFinder(char** puzzle, dirOpt dir)
    char **puzzlePtr = puzzle;
    // initialize a tempPuzzle
    int numRow = 0;
-   int numCol = strlen(puzzle[0]);  //should be root(2),1.414. round to 2.
+   int numCol = strlen(puzzle[0]);
    while (*puzzlePtr)
    {
-      numRow = numRow + 1;  //should be root(2),1.414. round to 2.
+      numRow = numRow + 1;
       puzzlePtr = puzzlePtr + 1;
    }
 
@@ -219,8 +219,8 @@ char** beforeFinder(char** puzzle, dirOpt dir)
             //printf("-------i=%d, cnt=%d---------\n",i,cnt);  //print of traversal
             for (int j = 0; j < cnt; j++)
             {
-               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-(2*(numRow-1)-i)+j,j);//print of traversal
-               tempPuzzle[i][j] = puzzle[numRow-1-(2*(numRow-1)-i)+j][j];
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,j+i-numRow+1);//print of traversal
+               tempPuzzle[i][j] = puzzle[j][j+i-numRow+1];
             }
             printf("after cnvt:%s\n", tempPuzzle[i]);
          }
@@ -272,8 +272,8 @@ char** beforeFinder(char** puzzle, dirOpt dir)
             //printf("-------i=%d, cnt=%d---------\n",i,cnt);  //print of traversal
             for (int j = 0; j < cnt; j++)
             {
-               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-(2*(numRow-1)-i)+j,j);//print of traversal
-               tempPuzzle[i][j] = puzzle[numRow-1-(2*(numRow-1)-i)+j][j];
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,j);//print of traversal
+               tempPuzzle[i][j] = puzzle[j][j+i-numRow+1];
             }
             //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
@@ -343,7 +343,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
                tempPuzzle[i][j] = puzzle[j][i-j];
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
 
          // cnt decreases
@@ -370,7 +370,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
             }
             if (i < numRow-1) { cnt++;}
             else { cnt--; }
-            printf("i=%d:after cnvt:%s\n", i, tempPuzzle[i]);
+            //printf("i=%d:after cnvt:%s\n", i, tempPuzzle[i]);
          }
 
          break;
@@ -387,9 +387,172 @@ char** beforeFinder(char** puzzle, dirOpt dir)
 //==========================================================
 int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
 {
-   
+   char **puzzlePtr = puzzle;
+
+   int numRow = 0;
+   int numCol = strlen(puzzle[0]);
+   while (*puzzlePtr)
+   {
+      numRow = numRow + 1;
+      puzzlePtr = puzzlePtr + 1;
+   }
+
+   int cnt, i;
+
+   switch(dir)
+   {
+      case right2left:  // flip horizontally
+         for (int i = 0; i < numRow; i++)
+         {
+            printf("line %d, before cnvt back:%s\n", i, tempPuzzle[i]);
+            for (int j = 0; j < numCol; j++)
+            {
+               puzzle[i][j] = tempPuzzle[i][numCol-1-j];
+            }
+            printf("after cnvt back:%s\n", puzzle[i]);
+         }
+         break;
+      case top2bottom: // flip diaonally
+         for (int i = 0; i < numCol; i++)
+         {
+            for (int j = 0; j < numRow; j++)
+            {
+               puzzle[i][j] = tempPuzzle[j][i];
+            }
+            printf("after cnvt back:%s\n", puzzle[i]);
+         }
+         break;
+      case bottom2top: // flip horizontally followed by flip diaonally(reversed order) 
+         // flip horizontally in place
+         for (int i = 0; i < numRow; i++)
+         {
+            for (int j = 0; j < (numCol+1)/2; j++)
+            {
+               char tmp = tempPuzzle[i][j];
+               tempPuzzle[i][j] = tempPuzzle[i][numCol-1-j];
+               tempPuzzle[i][numCol-1-j] = tmp;
+            }
+         }
+         // flip diaonally
+         for (int i = 0; i < numCol; i++)
+         {
+            for (int j = 0; j < numRow; j++)
+            {
+               puzzle[i][j] = tempPuzzle[j][i];
+            }
+            printf("after cnvt back:%s\n", puzzle[i]);
+         }
+         break;
+
+      //following cases:only considering suqare puzzle at the moment.
+      case topleft2bottomright:
+         // convert triangle back to rectangle
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+
+         for (; i < numRow; i++,cnt++)
+         {
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-i+j,j); //print of traversal
+               puzzle[numRow-1-i+j][j] = tempPuzzle[i][j];
+            }
+            printf("after cnvt back:%s\n", puzzle[i]);
+         }
+         break;
+      case bottomright2topleft:  // flip triangle horizontally followed by convert triangle back to rectangle
+         // flip triangle horizontally in place
+         cnt = 0;
+         for (i = 0; i < numRow*2-1; i++)
+         {
+            for (int j = 0; j < (cnt+1)/2; j++)
+            {
+               char tmp = tempPuzzle[i][j];
+               tempPuzzle[i][j] = tempPuzzle[i][cnt-j];
+               tempPuzzle[i][cnt-j] = tmp;
+            }
+            if (i < numRow-1) { cnt++;}
+            else { cnt--; }
+            //printf("i=%d:after horizontally flip:%s\n", i, tempPuzzle[i]);
+         }
+
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+         for (; i < numRow; i++,cnt++)
+         {
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-i+j,j); //print of traversal
+               puzzle[numRow-1-i+j][j] = tempPuzzle[i][j];
+            }
+            printf("after cnvt back:%s\n", puzzle[i]);
+         }
+         break;
+      case topright2bottomleft:
+         // convert triangle back to rectangle
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+
+         /////////......strange here....///////////
+         //all topleft2bottomright, topright2bottomleft, etc.(all 4) case...
+         //not to reverse changes made "beforeFinder",
+         //but only use the cnt increase part, just change limit from numRow-1 to numRow.
+         /////////////////////////////////////////
+
+         // cnt increases
+         for (; i < numRow; i++,cnt++) 
+         {
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
+                puzzle[j][i-j] = tempPuzzle[i][j];
+            }
+            printf("after cnvt back:%s\n", puzzle[i]);
+         }
+
+         break;
+      case bottomleft2topright: // flip horizontally in place followed by convert triangle to rectangle
+         // flip triangle horizontally in place
+         cnt = 0;
+         for (i = 0; i < numRow*2-1; i++)
+         {
+            for (int j = 0; j < (cnt+1)/2; j++)
+            {
+               char tmp = tempPuzzle[i][j];
+               tempPuzzle[i][j] = tempPuzzle[i][cnt-j];
+               tempPuzzle[i][cnt-j] = tmp;
+            }
+            if (i < numRow-1) { cnt++;}
+            else { cnt--; }
+            //printf("i=%d:after cnvt:%s\n", i, tempPuzzle[i]);
+         }
+
+         // convert triangle to rectangle
+         cnt = 1;  // number of elements on current row(tempPuzzle)
+         i = 0;
+
+         // cnt increases
+         for (; i < numRow; i++,cnt++)
+         {
+            //printf("*******i=%d, cnt=%d*******\n",i,cnt); //print of traversal
+            for (int j = 0; j < cnt; j++)
+            {
+               //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
+               puzzle[j][i-j] = tempPuzzle[i][j];
+            }
+            printf("after cnvt back:%s\n", puzzle[i]);
+         }
+         break;
+   }
+
+
    return 0;
 }
+
+
 
 //==========================================================
 // function: finder
@@ -468,22 +631,58 @@ int main()
    char **input = readUserInput(USER_INPUT_FILE);
    //display(input, typeInput);
 
-   // ----------- left 2 right --------
-   //finder(puzzle, input);
-   //display(puzzle, typeSolution);
+
+
+   // ------- left to right (original case) --------
+   // no conversion needed before fed into finder  
+   //finder(puzzle, input); 
    
-   
+   // following cases needs conversion......
    char **tempPuzzle;
-   // ----------- bottomright 2 topleft --------
-   tempPuzzle = beforeFinder(puzzle, topright2bottomleft);
+   // --------------- right to left --------------
+   tempPuzzle = beforeFinder(puzzle, right2left);
+   finder(tempPuzzle, input); 
+   printf("=======================\n");
+   afterFinder(puzzle, tempPuzzle, right2left);
+
+   // --------------- top to bottom --------------
+   //tempPuzzle = beforeFinder(puzzle, top2bottom);
    //finder(tempPuzzle, input);
+
+   // --------------- bottom to top --------------
+   //tempPuzzle = beforeFinder(puzzle, bottom2top);
+   //finder(tempPuzzle, input);
+
+   // ---------- topleft to bottomright ----------
+   //tempPuzzle = beforeFinder(puzzle, topleft2bottomright);
+   //finder(tempPuzzle, input);
+
+   // ---------- bottomright to topleft ----------
+   //tempPuzzle = beforeFinder(puzzle, bottomright2topleft);
+   //finder(tempPuzzle, input);
+
+   // ---------- topright to bottomleft ----------
+   //tempPuzzle = beforeFinder(puzzle, topright2bottomleft);
+   //finder(tempPuzzle, input);
+
+   // ---------- bottomleft to topright ----------
+   //tempPuzzle = beforeFinder(puzzle, bottomleft2topright);
+   //finder(tempPuzzle, input);
+
+   
+   
+
+
+   
+
+
+   //finder(puzzle, input);
    //afterFinder(puzzle, tempPuzzle, bottomright2topleft);
-
-
    //display(puzzle, typeSolution);
 
 
    return 0;
 }
    
+// careful with interfere after one found--> turn upper case..
 
