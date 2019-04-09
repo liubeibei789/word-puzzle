@@ -130,27 +130,78 @@ char** beforeFinder(char** puzzle, dirOpt dir)
    char **puzzlePtr = puzzle;
    // initialize a tempPuzzle
    int numRow = 0;
-   int numCol = strlen(puzzle[0])*2;  //should be root(2),1.414. round to 2.
+   int numCol = strlen(puzzle[0]);  //should be root(2),1.414. round to 2.
    while (*puzzlePtr)
    {
-      numRow = numRow + 2;  //should be root(2),1.414. round to 2.
+      numRow = numRow + 1;  //should be root(2),1.414. round to 2.
       puzzlePtr = puzzlePtr + 1;
    }
 
-   char **tempPuzzle = (char**)calloc(numRow, sizeof(char**));
+   char **tempPuzzle;
 
    // copy the conent
-   for (int i = 0; i < numRow/2; i++) //
+   switch(dir)
    {
-      tempPuzzle[i] = (char*)calloc(numCol, sizeof(char*));
-      printf("line %d, before cnvt:%s\n", i, puzzle[i]);
-      for (int j = 0; j < numCol/2; j++)
-      {
-         tempPuzzle[i][j] = puzzle[i][numCol/2-1-j];
-      }
-      printf("after cnvt:%s\n", tempPuzzle[i]);
+      case right2left:  // flip horizontally
+         tempPuzzle = (char**)calloc(numRow+1, sizeof(char**));
+         for (int i = 0; i < numRow; i++)
+         {
+            tempPuzzle[i] = (char*)calloc(numCol+1, sizeof(char*));
+            printf("line %d, before cnvt:%s\n", i, puzzle[i]);
+            for (int j = 0; j < numCol; j++)
+            {
+               tempPuzzle[i][j] = puzzle[i][numCol-1-j];
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+         break;
+      case top2bottom:  // flip diaonally
+         tempPuzzle = (char**)calloc(numCol+1, sizeof(char**)); 
+         printf("numCol=%d, numRow=%d\n",numCol, numRow);
+         for (int i = 0; i < numCol; i++)
+         {
+            tempPuzzle[i] = (char*)calloc(numRow+1, sizeof(char*));
+            for (int j = 0; j < numRow; j++)
+            {
+               tempPuzzle[i][j] = puzzle[j][i];
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+         break;
+      case bottom2top:  // flip diaonally followed by flip horizontally
+         tempPuzzle = (char**)calloc(numCol+1, sizeof(char**));
+         // flip diaonally
+         for (int i = 0; i < numCol; i++)
+         {
+            tempPuzzle[i] = (char*)calloc(numRow+1, sizeof(char*));
+            for (int j = 0; j < numRow; j++)
+            {
+               tempPuzzle[i][j] = puzzle[j][i];
+            }
+         }
+         // flip horizontally
+         for (int i = 0; i < numRow; i++)
+         {
+            for (int j = 0; j < (numCol+1)/2; j++)
+            {
+               char tmp = tempPuzzle[i][j];
+               tempPuzzle[i][j] = tempPuzzle[i][numCol-1-j];
+               tempPuzzle[i][numCol-1-j] = tmp;
+            }
+            printf("after cnvt:%s\n", tempPuzzle[i]);
+         }
+         break;
+      case topleft2bottomright:
+         break;
+      case bottomright2topleft:
+         break;
+      case topright2bottomleft:
+         break;
+      case bottomleft2topright:
+         break;
+      default:
+         break;
    }
-
    return tempPuzzle;
 }
 
@@ -247,7 +298,7 @@ int main()
    //display(puzzle, typeSolution);
    
    // ----------- right 2 left --------
-   char **tempPuzzle = beforeFinder(puzzle, right2left);
+   char **tempPuzzle = beforeFinder(puzzle, bottom2top);
    finder(tempPuzzle, input);
    //afterFinder(puzzle, tempPuzzle, right2left);
    //display(puzzle, typeSolution);
