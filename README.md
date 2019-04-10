@@ -1,4 +1,5 @@
 # world-puzzle
+'''
 [beliu: ~/Desktop/word-puzzle]$gcc solver.c
 [beliu: ~/Desktop/word-puzzle]$./a.out
 Welcome to Puzzle!
@@ -62,3 +63,4 @@ nTzlhwuohvfkqpxvexnr
 wdavvjihlrcxwyxysqih
 azuokjgsqxhudmmwfsyl
 [beliu: ~/Desktop/word-puzzle]$
+'''
