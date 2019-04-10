@@ -147,17 +147,17 @@ char** beforeFinder(char** puzzle, dirOpt dir)
          for (int i = 0; i < numRow; i++)
          {
             tempPuzzle[i] = (char*)calloc(numCol+1, sizeof(char*));
-            printf("line %d, before cnvt:%s\n", i, puzzle[i]);
+            //printf("line %d, before cnvt:%s\n", i, puzzle[i]);
             for (int j = 0; j < numCol; j++)
             {
                tempPuzzle[i][j] = puzzle[i][numCol-1-j];
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
          break;
       case top2bottom:  // flip diaonally
          tempPuzzle = (char**)calloc(numCol+1, sizeof(char**)); 
-         printf("numCol=%d, numRow=%d\n",numCol, numRow);
+         //printf("numCol=%d, numRow=%d\n",numCol, numRow);
          for (int i = 0; i < numCol; i++)
          {
             tempPuzzle[i] = (char*)calloc(numRow+1, sizeof(char*));
@@ -165,7 +165,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
             {
                tempPuzzle[i][j] = puzzle[j][i];
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
          break;
       case bottom2top:  // flip diaonally followed by flip horizontally
@@ -188,7 +188,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
                tempPuzzle[i][j] = tempPuzzle[i][numCol-1-j];
                tempPuzzle[i][numCol-1-j] = tmp;
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
          break;
 
@@ -209,7 +209,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-i+j,j); //print of traversal
                tempPuzzle[i][j] = puzzle[numRow-1-i+j][j];
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
 
          // cnt decreases
@@ -222,7 +222,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,j+i-numRow+1);//print of traversal
                tempPuzzle[i][j] = puzzle[j][j+i-numRow+1];
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
          /* draft: 
             i=0, numRow=3, j=0
@@ -289,7 +289,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
             }
             if (i < numRow-1) { cnt++;}
             else { cnt--; }
-            printf("i=%d:after cnvt:%s\n", i, tempPuzzle[i]);
+            //printf("i=%d:after cnvt:%s\n", i, tempPuzzle[i]);
          }
 
 
@@ -310,7 +310,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
                tempPuzzle[i][j] = puzzle[j][i-j];
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
 
          // cnt decreases
@@ -323,7 +323,7 @@ char** beforeFinder(char** puzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,i-numRow+1+j,numRow-1-j);
                tempPuzzle[i][j] = puzzle[i-numRow+1+j][numRow-1-j];
             }
-            printf("after cnvt:%s\n", tempPuzzle[i]);
+            //printf("after cnvt:%s\n", tempPuzzle[i]);
          }
 
          break;
@@ -404,12 +404,12 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
       case right2left:  // flip horizontally
          for (int i = 0; i < numRow; i++)
          {
-            printf("line %d, before cnvt back:%s\n", i, tempPuzzle[i]);
+            //printf("line %d, before cnvt back:%s\n", i, tempPuzzle[i]);
             for (int j = 0; j < numCol; j++)
             {
                puzzle[i][j] = tempPuzzle[i][numCol-1-j];
             }
-            printf("after cnvt back:%s\n", puzzle[i]);
+            //printf("after cnvt back:%s\n", puzzle[i]);
          }
          break;
       case top2bottom: // flip diaonally
@@ -419,7 +419,7 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
             {
                puzzle[i][j] = tempPuzzle[j][i];
             }
-            printf("after cnvt back:%s\n", puzzle[i]);
+            //printf("after cnvt back:%s\n", puzzle[i]);
          }
          break;
       case bottom2top: // flip horizontally followed by flip diaonally(reversed order) 
@@ -440,7 +440,7 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
             {
                puzzle[i][j] = tempPuzzle[j][i];
             }
-            printf("after cnvt back:%s\n", puzzle[i]);
+            //printf("after cnvt back:%s\n", puzzle[i]);
          }
          break;
 
@@ -458,7 +458,7 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-i+j,j); //print of traversal
                puzzle[numRow-1-i+j][j] = tempPuzzle[i][j];
             }
-            printf("after cnvt back:%s\n", puzzle[i]);
+            //printf("after cnvt back:%s\n", puzzle[i]);
          }
          break;
       case bottomright2topleft:  // flip triangle horizontally followed by convert triangle back to rectangle
@@ -487,7 +487,7 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,numRow-1-i+j,j); //print of traversal
                puzzle[numRow-1-i+j][j] = tempPuzzle[i][j];
             }
-            printf("after cnvt back:%s\n", puzzle[i]);
+            //printf("after cnvt back:%s\n", puzzle[i]);
          }
          break;
       case topright2bottomleft:
@@ -510,7 +510,7 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
                 puzzle[j][i-j] = tempPuzzle[i][j];
             }
-            printf("after cnvt back:%s\n", puzzle[i]);
+            //printf("after cnvt back:%s\n", puzzle[i]);
          }
 
          break;
@@ -543,7 +543,7 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
                //printf("tempPuzzle[%d][%d] = puzzle[%d][%d]\n",i,j,j,i-j); //print of traversal
                puzzle[j][i-j] = tempPuzzle[i][j];
             }
-            printf("after cnvt back:%s\n", puzzle[i]);
+            //printf("after cnvt back:%s\n", puzzle[i]);
          }
          break;
    }
@@ -563,7 +563,6 @@ int afterFinder(char** puzzle, char** tempPuzzle, dirOpt dir)
 //==========================================================
 int finder(char** matrix, char** userInput)
 {
-   printf("88888\n");
    char **matrixLine = matrix;
    char **userLine = userInput;
    int i = 0;
@@ -572,14 +571,30 @@ int finder(char** matrix, char** userInput)
    {
       while (*matrixLine != NULL)    //iter through puzzle rows
       {
-         char *p = strstr(*matrixLine, *userLine);   
+         //make an all-lower *matrixLine copy first, 
+         //find *userLine in this all-lower copy,
+         //if found, matched part will be ALL-CAP finally,
+         //if not found, use the original *matrixLine
+
+         // something wrong here.....the character at the intersection is lower in solution....
+         char *allLowerCopy = calloc(strlen(*matrixLine), sizeof(char));
+         strcpy(allLowerCopy, *matrixLine);
+         char *ptr = allLowerCopy;
+
+         for (int i = 0; i < strlen(*matrixLine); i++)
+         {
+            *(ptr+i) = tolower(*(ptr+i));
+         } 
+         char *p = strstr(allLowerCopy, *userLine);
+         //char *p = strstr(*matrixLine, *userLine);   
          while(p) 
          {
             for (int i = 0; i < strlen(*userLine); i++) 
             {
                *(p+i) = toupper(*(p+i));
             }
-            printf("77777:one match found, %s\n", *userLine);
+            printf("one match found, %s\n", *userLine);
+            strcpy(*matrixLine, allLowerCopy);
             p = strstr(p+1, *userLine);
          }
          matrixLine = matrixLine + 1;
@@ -627,59 +642,58 @@ int display(char** matrix, displayType type)
 int main()
 {
    char **puzzle = readPuzzle(PUZZLE_FILE);
-   //display(puzzle, typePuzzle);
+   display(puzzle, typePuzzle);
    char **input = readUserInput(USER_INPUT_FILE);
-   //display(input, typeInput);
+   display(input, typeInput);
 
+   printf("===== looking for words =====\n");
 
 
    // ------- left to right (original case) --------
    // no conversion needed before fed into finder  
-   //finder(puzzle, input); 
+   finder(puzzle, input); 
    
    // following cases needs conversion......
    char **tempPuzzle;
+
+#if 1
    // --------------- right to left --------------
    tempPuzzle = beforeFinder(puzzle, right2left);
    finder(tempPuzzle, input); 
-   printf("=======================\n");
    afterFinder(puzzle, tempPuzzle, right2left);
-
+#endif
    // --------------- top to bottom --------------
-   //tempPuzzle = beforeFinder(puzzle, top2bottom);
-   //finder(tempPuzzle, input);
-
+   tempPuzzle = beforeFinder(puzzle, top2bottom);
+   finder(tempPuzzle, input);
+   afterFinder(puzzle, tempPuzzle, top2bottom);
+#if 1
    // --------------- bottom to top --------------
-   //tempPuzzle = beforeFinder(puzzle, bottom2top);
-   //finder(tempPuzzle, input);
+   tempPuzzle = beforeFinder(puzzle, bottom2top);
+   finder(tempPuzzle, input);
+   afterFinder(puzzle, tempPuzzle, bottom2top);
 
    // ---------- topleft to bottomright ----------
-   //tempPuzzle = beforeFinder(puzzle, topleft2bottomright);
-   //finder(tempPuzzle, input);
+   tempPuzzle = beforeFinder(puzzle, topleft2bottomright);
+   finder(tempPuzzle, input);
+   afterFinder(puzzle, tempPuzzle, topleft2bottomright);
 
    // ---------- bottomright to topleft ----------
-   //tempPuzzle = beforeFinder(puzzle, bottomright2topleft);
-   //finder(tempPuzzle, input);
+   tempPuzzle = beforeFinder(puzzle, bottomright2topleft);
+   finder(tempPuzzle, input);
+   afterFinder(puzzle, tempPuzzle, bottomright2topleft);
 
    // ---------- topright to bottomleft ----------
-   //tempPuzzle = beforeFinder(puzzle, topright2bottomleft);
-   //finder(tempPuzzle, input);
+   tempPuzzle = beforeFinder(puzzle, topright2bottomleft);
+   finder(tempPuzzle, input);
+   afterFinder(puzzle, tempPuzzle, topright2bottomleft);
 
    // ---------- bottomleft to topright ----------
-   //tempPuzzle = beforeFinder(puzzle, bottomleft2topright);
-   //finder(tempPuzzle, input);
+   tempPuzzle = beforeFinder(puzzle, bottomleft2topright);
+   finder(tempPuzzle, input);
+   afterFinder(puzzle, tempPuzzle, bottomleft2topright);
+#endif
 
-   
-   
-
-
-   
-
-
-   //finder(puzzle, input);
-   //afterFinder(puzzle, tempPuzzle, bottomright2topleft);
-   //display(puzzle, typeSolution);
-
+   display(puzzle, typeSolution);
 
    return 0;
 }

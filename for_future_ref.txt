@@ -36,4 +36,26 @@ gcc  a.c  –o  a.o
 gcc  b.c  -o  b.o
 gcc  c.c  -o  c.o
 gcc  a.o  b.o  c.o  –o  all  
-./all                   
+./all 
+(TODO: I am still not clear about how to compile and link multiple c source files)
+
+5. intersection problem
+TODO:
+I put a logic in finder to deal with two words intersection,
+but the character at the intersection is lower in solution....
+something wrong here...to be figured out.
+
+6. beforeFinder and afterFinder not symmetric
+for the 4 diagonal cases(topleft2bottomright,etc.),
+"from rectangle to triangle" and "from triangle back to rectangle", operations are not exactly reverse.
+this is strange to me.
+
+
+7. printing index before manipulating matrix
+if logic is complex, print indexes before essential value assignments.
+
+8. look for apis(e.x. strstr()) before writing it yourself.
+
+
+
+                
