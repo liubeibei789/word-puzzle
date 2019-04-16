@@ -639,6 +639,38 @@ int display(char** matrix, displayType type)
    return 0;
 }
 
+//==========================================================
+// function: cleanUp
+// input: 2-D matrix
+// output: if succeed, return 0;
+//==========================================================
+int cleanUp(char **puzzle)
+{
+   int i = 0;
+   while(puzzle[i] != NULL)
+   {
+      printf("freeing i=%d, ", i);
+      printf("len=%lu\n",strlen(puzzle[i]));
+      /////////////////// to Tianyu: I do not need to free element by element, do I??? ////////////////////
+      /*
+      for (int j = 0; j < strlen(puzzle[i]); j++)
+      {
+         printf("%c",puzzle[i][j]);
+         free(&puzzle[i][j]);  /// this line bad???
+      }
+      printf("\n");
+      */
+      free(puzzle[i]);
+      i++;
+   }
+   free(puzzle);
+   return 0;
+}
+
+//==========================================================
+// main function
+//==========================================================
+
 int main()
 {
    char **puzzle = readPuzzle(PUZZLE_FILE);
@@ -661,39 +693,54 @@ int main()
    tempPuzzle = beforeFinder(puzzle, right2left);
    finder(tempPuzzle, input); 
    afterFinder(puzzle, tempPuzzle, right2left);
+
+   cleanUp(tempPuzzle);
 #endif
    // --------------- top to bottom --------------
    tempPuzzle = beforeFinder(puzzle, top2bottom);
    finder(tempPuzzle, input);
    afterFinder(puzzle, tempPuzzle, top2bottom);
+
+   cleanUp(tempPuzzle);
 #if 1
    // --------------- bottom to top --------------
    tempPuzzle = beforeFinder(puzzle, bottom2top);
    finder(tempPuzzle, input);
    afterFinder(puzzle, tempPuzzle, bottom2top);
 
+   cleanUp(tempPuzzle);
+
    // ---------- topleft to bottomright ----------
    tempPuzzle = beforeFinder(puzzle, topleft2bottomright);
    finder(tempPuzzle, input);
    afterFinder(puzzle, tempPuzzle, topleft2bottomright);
+
+   cleanUp(tempPuzzle);
 
    // ---------- bottomright to topleft ----------
    tempPuzzle = beforeFinder(puzzle, bottomright2topleft);
    finder(tempPuzzle, input);
    afterFinder(puzzle, tempPuzzle, bottomright2topleft);
 
+   cleanUp(tempPuzzle);
+
    // ---------- topright to bottomleft ----------
    tempPuzzle = beforeFinder(puzzle, topright2bottomleft);
    finder(tempPuzzle, input);
    afterFinder(puzzle, tempPuzzle, topright2bottomleft);
 
+   cleanUp(tempPuzzle);
+
    // ---------- bottomleft to topright ----------
    tempPuzzle = beforeFinder(puzzle, bottomleft2topright);
    finder(tempPuzzle, input);
    afterFinder(puzzle, tempPuzzle, bottomleft2topright);
+
+   cleanUp(tempPuzzle);
 #endif
 
    display(puzzle, typeSolution);
+   cleanUp(puzzle);
 
    return 0;
 }
